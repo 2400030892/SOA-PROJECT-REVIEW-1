@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "../../../../eureka-server"
+		},
+		{
+			"path": "../../../../api-gateway 2"
+		},
+		{
+			"path": "../../../../doctor-service"
+		},
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../billing-service"
+		},
+		{
+			"path": "../../../../auth-service"
+		}
+	],
+	"settings": {}
+}
