@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.medicare.appointment_service.client.BillingClient;
-import com.medicare.appointment_service.client.DoctorClient;
 import com.medicare.appointment_service.entity.Appointment;
 import com.medicare.appointment_service.repository.AppointmentRepository;
 
@@ -20,41 +18,17 @@ import com.medicare.appointment_service.repository.AppointmentRepository;
 public class AppointmentController {
 
     private final AppointmentRepository appointmentRepository;
-    private final DoctorClient doctorClient;
-    private final BillingClient billingClient;
 
-    public AppointmentController(
-            AppointmentRepository appointmentRepository,
-            DoctorClient doctorClient,
-            BillingClient billingClient) {
-
+    public AppointmentController(AppointmentRepository appointmentRepository) {
         this.appointmentRepository = appointmentRepository;
-        this.doctorClient = doctorClient;
-        this.billingClient = billingClient;
     }
 
     @PostMapping
     public Appointment bookAppointment(@RequestBody Appointment appointment) {
 
-        // Check whether doctor exists
-        if (!doctorClient.doctorExists(appointment.getDoctorId())) {
-            throw new RuntimeException("Doctor not found");
-        }
-
-        // Book appointment
         appointment.setStatus("BOOKED");
 
-        Appointment savedAppointment =
-                appointmentRepository.save(appointment);
-
-        // Create billing record
-        billingClient.createBill(
-                savedAppointment.getId(),
-                savedAppointment.getPatientName(),
-                500.0
-        );
-
-        return savedAppointment;
+        return appointmentRepository.save(appointment);
     }
 
     @GetMapping
